@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link rel="stylesheet" href="style.css">
+   
+    <title>Movie Search</title>
+</head>
+<body>
+    <div class="title">
+    <h1>Alans Movie Search</h1>
+<img src="superman-6-logo-svg-vector.svg" height="200px" width="200px" alt="">
+</div>
+
+    <div id="search-container">
+        <input type="text" id="search-input" placeholder="Enter a movie title">
+        <button onclick="searchMovies()">Search</button>
+    </div>
+
+    <div id="results-container"></div>
+
+    <script src="app.js"></script>
+    <script>
+        function searchMovies() {
+            const searchInput = document.getElementById('search-input').value;
+            const apiKey = 'ec128621'; 
+
+            // Make a GET request to the OMDB API
+            fetch(`https://www.omdbapi.com/?apikey=${apiKey}&s=${searchInput}`)
+                .then(response => response.json())
+                .then(data => {
+                    // Process the retrieved data
+                    displayMovies(data.Search);
+                })
+                .catch(error => {
+                    console.log('Error:', error);
+                });
+        }
+
+        function displayMovies(movies) {
+            const resultsContainer = document.getElementById('results-container');
+            resultsContainer.innerHTML = '';
+
+            if (movies && movies.length > 0) {
+                movies.forEach(movie => {
+                    const movieElement = document.createElement('div');
+                    movieElement.textContent = movie.Title;
+                    resultsContainer.appendChild(movieElement);
+                });
+            } else {
+                const noResultsElement = document.createElement('p');
+                noResultsElement.textContent = 'No movies found.';
+                resultsContainer.appendChild(noResultsElement);
+            }
+        }
+    </script>
+</body>
+</html>
